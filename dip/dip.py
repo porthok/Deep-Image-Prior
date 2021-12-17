@@ -35,7 +35,6 @@ def Main(input_leopold = False):
     fname = 'image.csv'
   else:
     fname = 'data/F16_GT.png'
-  #fname = '11b_194.png'
 
   # Load image
 
@@ -51,10 +50,6 @@ def Main(input_leopold = False):
 
       return img_noisy_pil, img_noisy_np
 
-  #img = Image.open('11b_194.png')
-  #img_np = np.asarray(img)
-  #print(img_np)
-
   if input_leopold:
     #from numpy import genfromtxt
     #img_np = genfromtxt('image.csv', delimiter=',')
@@ -64,33 +59,14 @@ def Main(input_leopold = False):
     import matplotlib.image as mpimg
     import numpy as np
     from matplotlib import cm
-    #img = mpimg.imread("11b_194.png")
     print(img_np)
-    #if img.dtype == np.float32: # Si le résultat n'est pas un tableau d'entiers
-    #    img = (img * 255).astype(np.uint8)
     img_np = (img_np * 255).astype(np.uint8)
     im = Image.fromarray(img_np)
-    #im
 
   if fname == 'data/F16_GT.png':
       # Add synthetic noise
       img_pil = crop_image(get_image(fname, imsize)[0], d=32)
       img_np = pil_to_np(img_pil)
-
-      img_noisy_pil, img_noisy_np = get_noisy_image(img_np, sigma_)
-      if PLOT:
-          plot_image_grid([img_np, img_noisy_np], 4, 6);
-
-  elif fname == '11b_194.png':
-      # Add synthetic noise
-      img = mpimg.imread(fname)
-      if img.dtype == np.float32:
-          img = (img * 255).astype(np.uint8)
-      im = Image.fromarray(img)
-
-      img_pil = crop_image(im, d=32)
-      ar = np.array(img_pil)[None, ...]
-      img_np = ar.astype(np.float32) / 255
 
       img_noisy_pil, img_noisy_np = get_noisy_image(img_np, sigma_)
       if PLOT:
@@ -169,7 +145,7 @@ def Main(input_leopold = False):
 
   # Optimize
 
-  PLOT = True
+  PLOT = False
   net_input_saved = net_input.detach().clone()
   noise = net_input.detach().clone()
   out_avg = None
